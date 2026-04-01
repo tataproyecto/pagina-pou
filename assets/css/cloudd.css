@@ -1,63 +1,66 @@
-
 body {
-background-color: black;
+  background-color: #141414;
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
 }
 
 header {
-width: 100%;
-height: 100px;
-background-color: rgb(0, 0, 0);
-margin: 0 auto;
-display: flex;
-align-items: center;
-justify-content: space-between;
+  width: 80%;
+  height: 85px;
+
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .logo {
-width: 80px;
-height: 80px;
-background-color: green;
-
+  width: 120px;
+  height: 84px;
 }
 
 nav {
-width: 1300px;
-height: 60px;
-background-color: rgb(0, 0, 0);
+  width: 900px;
+  height: 60px;
 }
-{
 
+.foto {
+  justify-content: space-between;
+  padding-right: 200px;
+  width: 160%;
+  height: 70%;
+}
+ul {
+  color: aliceblue;
 
-}
-.foto{
-    width: 200px;
-    height: 90px;
-}
-ul{
-    color: aliceblue;
-    font-style: oblique;
-    display: flex;
-    justify-content: space-between;
-    list-style: none; 
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
 }
 
 .contacto {
-  background-color: grey; 
-  color: black; 
+  background-color: #141414;
+  color: rgb(255, 255, 255);
+  border-radius: 6px;
+  padding: 8px 16px;
+  text-decoration: none;
+  border: 1px solid gray;
+}
+.probar {
+  background-color: rgb(255, 255, 255);
+  color: #1f1e1e;
   border-radius: 6px;
   padding: 8px 16px;
   text-decoration: none;
 }
-  .probar {
-  background-color: rgb(255, 255, 255); 
-  color: rgb(0, 0, 0); 
-  border-radius: 6px;
-  padding: 8px 16px;
+.link {
+  color: gray;
   text-decoration: none;
-  }
-  .link{
-    
-    color: azure;
-    
-  }
-  
+}
+.link:hover {
+  color: white;
+  transition: 1s all ease-in;
+}

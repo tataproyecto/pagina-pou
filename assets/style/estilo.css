@@ -1,0 +1,52 @@
+main {
+  grid-template-columns: 20% 20% 20%;
+  grid-template-rows: 200px 600px;
+  gap: 20px;
+  display: grid;
+  justify-content: center;
+}
+
+.n {
+  background-color: rgb(86, 86, 121);
+  box-shadow: -9px -8px 9px -4px rgba(13, 10, 10, 0.75);
+  -webkit-box-shadow: -9px -8px 9px -4px rgba(13, 10, 10, 0.75);
+  -moz-box-shadow: -9px -8px 9px -4px rgba(13, 10, 10, 0.75);
+  text-align: center;
+  justify-content: center;
+}
+
+.d {
+  background-color: rgb(86, 86, 121);
+  box-shadow: -9px -8px 9px -4px rgba(13, 10, 10, 0.75);
+  -webkit-box-shadow: -9px -8px 9px -4px rgba(13, 10, 10, 0.75);
+  -moz-box-shadow: -9px -8px 9px -4px rgba(13, 10, 10, 0.75);
+  text-align: center;
+  justify-content: center;
+}
+
+.c {
+  background-color: rgb(86, 86, 121);
+  box-shadow: -9px -8px 9px -4px rgba(13, 10, 10, 0.75);
+  -webkit-box-shadow: -9px -8px 9px -4px rgba(13, 10, 10, 0.75);
+  -moz-box-shadow: -9px -8px 9px -4px rgba(13, 10, 10, 0.75);
+  text-align: center;
+  justify-content: center;
+}
+body {
+  background-color: lightgray;
+}
+.n,
+.d,
+.c {
+  transition: 0.3s;
+  border-radius: 10px;
+}
+
+.n:hover,
+.d:hover,
+.c:hover {
+  transform: scale(1.05);
+}
+img {
+  width: 100%;
+}

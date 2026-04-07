@@ -57,10 +57,122 @@ ul {
   text-decoration: none;
 }
 .link {
-  color: gray;
+  color: #c2c0b6;
   text-decoration: none;
 }
 .link:hover {
   color: white;
   transition: 1s all ease-in;
+}
+.homeclaude {
+  background-color: 141414;
+  grid-template-columns: 539px 200px;
+  grid-template-rows: 633px 200px;
+  gap: 20px 40px;
+  justify-content: center;
+  display: grid;
+}
+.continuar {
+  max-width: 480px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.continuar h1 {
+  color: white;
+  font-size: 56px;
+  margin: 48px 10px 0px;
+  line-height: 1.2;
+}
+
+.continuar .subtitle {
+  color: #c2c0b6;
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+
+.continuar .card {
+  background-color: #1a1a1a;
+  border: 1px solid #2f2f2f;
+  border-radius: 20px;
+  padding: 25px;
+}
+
+.continuar .btn-google {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #3a3a3a;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+  margin-bottom: 15px;
+  transition: 0.2s;
+}
+
+.continuar .btn-google:hover {
+  background-color: #242424;
+}
+
+.continuar .divider {
+  color: #888;
+  margin: 10px 0 15px;
+}
+
+.continuar .input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background-color: #2a2a2a;
+  color: white;
+  margin-bottom: 10px;
+  outline: none;
+}
+
+.continuar .input::placeholder {
+  color: #888;
+}
+
+.continuar .btn-email {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background-color: #e6e6e6;
+  color: black;
+  cursor: pointer;
+  margin-bottom: 15px;
+  transition: 0.2s;
+}
+
+.continuar .btn-email:hover {
+  background-color: #d4d4d4;
+}
+
+.continuar .terms {
+  font-size: 12px;
+  color: #777;
+  line-height: 1.4;
+}
+.continuar .download {
+  margin-top: 20px;
+}
+
+.continuar .btn-download {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #3a3a3a;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.continuar .btn-download:hover {
+  background-color: #242424;
+}
+.title {
+  font-weight: 300;
 }

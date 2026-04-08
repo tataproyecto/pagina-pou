@@ -65,14 +65,13 @@ ul {
   transition: 1s all ease-in;
 }
 .homeclaude {
-  background-color: 141414;
-  grid-template-columns: 539px 200px;
-  grid-template-rows: 633px 200px;
-  gap: 20px 40px;
-  justify-content: center;
   display: grid;
+  grid-template-columns: 50% 50%;
 }
 .continuar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   max-width: 480px;
   margin: 0 auto;
   text-align: center;
@@ -87,20 +86,25 @@ ul {
 
 .continuar .subtitle {
   color: #c2c0b6;
-  font-size: 16px;
-  margin-bottom: 30px;
+  font-size: 18px;
+  margin-bottom: 27px;
 }
 
 .continuar .card {
-  background-color: #1a1a1a;
+  height: 315px;
+  width: 448px;
+  background-color: #141413;
   border: 1px solid #2f2f2f;
   border-radius: 20px;
-  padding: 25px;
+  padding: 28px;
+  margin: 32px 46px 0px 46px;
 }
 
 .continuar .btn-google {
-  width: 100%;
-  padding: 12px;
+  width: 390px;
+  height: 44px;
+
+  font-size: 16px;
   border-radius: 10px;
   border: 1px solid #3a3a3a;
   background-color: transparent;
@@ -120,14 +124,16 @@ ul {
 }
 
 .continuar .input {
-  width: 100%;
-  padding: 12px;
+  width: 390px;
+  height: 44px;
+
   border-radius: 10px;
   border: none;
   background-color: #2a2a2a;
   color: white;
   margin-bottom: 10px;
   outline: none;
+  font-size: 18px;
 }
 
 .continuar .input::placeholder {
@@ -135,15 +141,17 @@ ul {
 }
 
 .continuar .btn-email {
-  width: 100%;
+  width: 390px;
+  height: 44px;
   padding: 12px;
   border-radius: 10px;
   border: none;
-  background-color: #e6e6e6;
-  color: black;
+  background-color: white;
+  color: hsl(60 2.7% 14.5% / 1);
   cursor: pointer;
   margin-bottom: 15px;
   transition: 0.2s;
+  font-size: 18px;
 }
 
 .continuar .btn-email:hover {
@@ -151,17 +159,25 @@ ul {
 }
 
 .continuar .terms {
-  font-size: 12px;
+  line-height: 1rem;
+  font-size: 0.75rem;
   color: #777;
   line-height: 1.4;
+  --font-ui: var(--font-anthropic-sans);
 }
 .continuar .download {
   margin-top: 20px;
 }
 
 .continuar .btn-download {
-  width: 100%;
-  padding: 12px;
+  width: 390px;
+  height: 44px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 390px;
+  height: 44px;
   border-radius: 10px;
   border: 1px solid #3a3a3a;
   background-color: transparent;
@@ -175,4 +191,16 @@ ul {
 }
 .title {
   font-weight: 300;
+}
+.gugle {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+}
+.wind {
+  height: 20px;
+  width: 20px;
+}
+.home {
+  width: 715px;
 }

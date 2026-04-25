@@ -9,7 +9,7 @@
       body {
         margin: 0;
         font-family: "Segoe UI", sans-serif;
-        background: radial-gradient(circle at top, #1a0f4a, #0a0030);
+        background: radial-gradient(circle at top, #d4c8ed, #ede8f5);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -42,20 +42,13 @@
         min-height: 720px;
         border-radius: 40px;
         padding: 28px 20px;
-        background: linear-gradient(180deg, #3a0ca3, #f72585);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-        color: white;
+        background: #f3effc;
+        border: 1px solid #d4c8ed;
+        box-shadow: 0 20px 40px rgba(130, 100, 200, 0.15);
+        color: #3d2e60;
         box-sizing: border-box;
         animation: fadeIn 0.8s ease;
         margin: 2rem 0;
-      }
-
-      .phone::-webkit-scrollbar {
-        width: 5px;
-      }
-      .phone::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.3);
-        border-radius: 10px;
       }
 
       .emoji {
@@ -70,23 +63,24 @@
         text-align: center;
         margin: 0 0 20px;
         font-weight: 500;
+        color: #5a4480;
       }
 
       label {
         font-size: 13px;
         display: block;
         margin: 14px 0 5px;
-        color: rgba(255, 255, 255, 0.9);
+        color: #7a62a3;
       }
 
       input[type="text"] {
         width: 100%;
         padding: 10px 12px;
         border-radius: 10px;
-        border: none;
+        border: 1px solid #c4b0e8;
         outline: none;
-        background: rgba(255, 255, 255, 0.2);
-        color: white;
+        background: #ede8f8;
+        color: #3d2e60;
         font-size: 14px;
         box-sizing: border-box;
         transition:
@@ -96,12 +90,13 @@
       }
 
       input[type="text"]::placeholder {
-        color: rgba(255, 255, 255, 0.55);
+        color: #b0a0cc;
       }
 
       input[type="text"]:focus {
-        background: rgba(255, 255, 255, 0.35);
-        box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+        background: #e8e2f8;
+        border-color: #9b7fd4;
+        box-shadow: 0 0 8px rgba(155, 127, 212, 0.3);
         transform: scale(1.02);
       }
 
@@ -112,7 +107,6 @@
         box-shadow: none !important;
       }
 
-      /* Botones Sí / No */
       .radio-group {
         display: flex;
         gap: 10px;
@@ -123,9 +117,9 @@
         flex: 1;
         padding: 10px;
         border-radius: 10px;
-        border: none;
-        background: rgba(255, 255, 255, 0.2);
-        color: white;
+        border: 1px solid #c4b0e8;
+        background: #ede8f8;
+        color: #7a62a3;
         cursor: pointer;
         font-size: 14px;
         transition:
@@ -134,16 +128,17 @@
       }
 
       .radio-group button:hover {
-        background: rgba(255, 255, 255, 0.32);
+        background: #e0d8f5;
         transform: scale(1.04);
       }
 
       .radio-group button.active {
-        background: #ff0054;
-        box-shadow: 0 0 10px #ff0054;
+        background: #9b7fd4;
+        color: white;
+        border-color: #9b7fd4;
+        box-shadow: none;
       }
 
-      /* Campo medicación con animación */
       .med-wrapper {
         overflow: hidden;
         transition:
@@ -161,45 +156,49 @@
         margin-top: 0;
       }
 
-      /* Cards de nivel */
       .options {
         display: flex;
+        flex-wrap: wrap;
         gap: 10px;
         margin-top: 12px;
       }
 
       .card {
         flex: 1;
+        min-width: 80px;
         padding: 10px 6px;
         border-radius: 15px;
         text-align: center;
         font-size: 12px;
         cursor: pointer;
-        background: rgba(255, 255, 255, 0.2);
+        background: #ede8f8;
+        border: 1px solid #c4b0e8;
+        color: #7a62a3;
+        line-height: 1.4;
         transition:
           background 0.3s,
-          transform 0.25s,
-          box-shadow 0.25s;
+          transform 0.25s;
       }
 
       .card:hover {
         transform: translateY(-4px) scale(1.04);
-        background: rgba(255, 255, 255, 0.32);
+        background: #e0d8f5;
       }
 
       .card.active {
-        background: linear-gradient(45deg, #ff006e, #ffbe0b);
-        box-shadow: 0 0 15px rgba(255, 0, 110, 0.8);
+        background: #9b7fd4;
+        color: white;
+        border-color: #9b7fd4;
+        box-shadow: none;
       }
 
-      /* Botón continuar */
       .btn {
         width: 100%;
         margin-top: 25px;
         padding: 15px;
         border-radius: 25px;
         border: none;
-        background: linear-gradient(45deg, #ff006e, #ff5400);
+        background: #9b7fd4;
         color: white;
         font-size: 16px;
         cursor: pointer;
@@ -210,7 +209,7 @@
 
       .btn:hover {
         transform: scale(1.05);
-        box-shadow: 0 0 20px rgba(255, 0, 110, 0.8);
+        box-shadow: 0 4px 18px rgba(155, 127, 212, 0.4);
       }
 
       .btn:active {
@@ -222,75 +221,53 @@
   <body>
     <div class="phone">
       <div class="emoji">😏</div>
+      <h1>Nexis Asistente Social IA</h1>
 
-      <h1>Bienvenido a tu Asistente Social IA</h1>
+      <label>Nombre</label>
+      <input type="text" placeholder="Tu nombre..." />
 
-      <label>¿Cómo te gustaría que te llame?</label>
-      <input type="text" placeholder="Escribe tu nombre..." />
-
-      <label>¿Por cuánto tiempo te gustaría usar la aplicación?</label>
-      <input type="text" placeholder="Escribe tu tiempo estimado..." />
-
-      <label>¿Estás medicado?</label>
-      <div class="radio-group" id="medicado">
-        <button class="active" data-val="si">Sí</button>
-        <button data-val="no">No</button>
+      <label>¿Tienes medicación?</label>
+      <div class="radio-group">
+        <button class="active" id="si-btn" onclick="setMed(true)">Sí</button>
+        <button id="no-btn" onclick="setMed(false)">No</button>
       </div>
 
-      <div class="med-wrapper" id="medWrapper">
-        <input
-          type="text"
-          id="medInput"
-          placeholder="Escribe tu medicación..."
-        />
+      <div class="med-wrapper" id="med-wrapper">
+        <label>Nombre del medicamento</label>
+        <input type="text" id="med-input" placeholder="Ej: Sertralina..." />
       </div>
 
-      <label>Nivel de ayuda que necesitas:</label>
-      <div class="options" id="nivel">
-        <div class="card active">💖<br />Apoyo Básico</div>
-        <div class="card">💬<br />Ayuda Moderada</div>
-        <div class="card">🛟<br />Asistencia Intensiva</div>
+      <label>¿Por cuánto tiempo usarás la app?</label>
+      <input type="text" placeholder="Ej: 3 meses, indefinido..." />
+
+      <label>¿Cómo te gustaría usar la app?</label>
+      <div class="options">
+        <div class="card active" onclick="setUso(this)">💬<br />Consejero</div>
+        <div class="card" onclick="setUso(this)">🤝<br />Ayudante</div>
+        <div class="card" onclick="setUso(this)">📓<br />Diario</div>
+        <div class="card" onclick="setUso(this)">🧘<br />Bienestar</div>
       </div>
 
       <button class="btn">Continuar</button>
     </div>
 
     <script>
-      // Selección única reutilizable
-      function activarSeleccion(grupoId, itemSelector) {
-        const grupo = document.getElementById(grupoId);
-        const items = grupo.querySelectorAll(itemSelector);
-        items.forEach((item) => {
-          item.addEventListener("click", () => {
-            items.forEach((el) => el.classList.remove("active"));
-            item.classList.add("active");
-          });
-        });
+      function setMed(tiene) {
+        document.getElementById("si-btn").classList.toggle("active", tiene);
+        document.getElementById("no-btn").classList.toggle("active", !tiene);
+        const wrapper = document.getElementById("med-wrapper");
+        const inp = document.getElementById("med-input");
+        wrapper.classList.toggle("hidden", !tiene);
+        inp.disabled = !tiene;
+        if (!tiene) inp.value = "";
       }
 
-      // Cards de nivel
-      activarSeleccion("nivel", ".card");
-
-      // Botones Sí / No con animación del campo medicación
-      const btns = document.querySelectorAll("#medicado button");
-      const wrapper = document.getElementById("medWrapper");
-      const medInput = document.getElementById("medInput");
-
-      btns.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          btns.forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
-
-          if (btn.dataset.val === "no") {
-            wrapper.classList.add("hidden");
-            medInput.disabled = true;
-            medInput.value = "";
-          } else {
-            wrapper.classList.remove("hidden");
-            medInput.disabled = false;
-          }
-        });
-      });
+      function setUso(el) {
+        document
+          .querySelectorAll(".card")
+          .forEach((c) => c.classList.remove("active"));
+        el.classList.add("active");
+      }
     </script>
   </body>
 </html>

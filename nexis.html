@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>nexis.ia – Asistente Social IA</title>
+    <style>
+      /* ────────────────────────────────
+     VARIABLES DE COLOR (Violeta / Lila / Lavanda)
+     ──────────────────────────────── */
+      :root {
+        --violeta: #7f00ff;
+        --lila: #c8a2c8;
+        --lavanda: #e6e6fa;
+        --bg-gradient: radial-gradient(
+          circle at top,
+          var(--lila),
+          var(--lavanda)
+        );
+        --bg-app: #f3effc;
+        --border: #d4c8ed;
+      }
+
+      /* ────────────────────────────────
+     BODY – centra la app
+     ──────────────────────────────── */
+      body {
+        margin: 0;
+        font-family: "Segoe UI", sans-serif;
+        background: var(--bg-gradient);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      /* ────────────────────────────────
+     CONTENEDOR PRINCIPAL (versión desktop)
+     ──────────────────────────────── */
+      .app {
+        width: 100%;
+        max-width: 800px;
+        min-height: 80vh;
+        background: var(--bg-app);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(130, 100, 200, 0.15);
+        color: #3d2e60;
+        box-sizing: border-box;
+        padding: 30px 25px;
+        display: flex;
+        flex-direction: column;
+        animation: fadeIn 0.8s ease;
+        position: relative; /* para la etiqueta superior derecha */
+      }
+
+      .top-right {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 13px;
+        color: #7a62a3;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(30px) scale(0.96);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+      @keyframes bounce {
+        to {
+          transform: translateY(-6px);
+        }
+      }
+
+      /* ────────────────────────────────
+     ELEMENTOS COMUNES (emoji, títulos, inputs…)
+     ──────────────────────────────── */
+      .emoji {
+        text-align: center;
+        font-size: 70px;
+        margin-bottom: 15px;
+        animation: float 3s infinite ease-in-out;
+      }
+      h1 {
+        font-size: 22px;
+        text-align: center;
+        margin: 0 0 25px;
+        font-weight: 500;
+        color: #5a4480;
+      }
+      label {
+        font-size: 14px;
+        display: block;
+        margin: 14px 0 5px;
+        color: #7a62a3;
+      }
+      input[type="text"] {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid #c4b0e8;
+        outline: none;
+        background: #ede8f8;
+        color: #3d2e60;
+        font-size: 14px;
+        box-sizing: border-box;
+        transition:
+          background 0.3s,
+          box-shadow 0.3s,
+          transform 0.3s;
+      }
+      input[type="text"]::placeholder {
+        color: #b0a0cc;
+      }
+      input[type="text"]:focus {
+        background: #e8e2f8;
+        border-color: #9b7fd4;
+        box-shadow: 0 0 8px rgba(155, 127, 212, 0.3);
+        transform: scale(1.02);
+      }
+      .radio-group {
+        display: flex;
+        gap: 10px;
+        margin: 8px 0 0;
+      }
+      .radio-group button {
+        flex: 1;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #c4b0e8;
+        background: #ede8f8;
+        color: #7a62a3;
+        cursor: pointer;
+        font-size: 14px;
+        transition:
+          background 0.3s,
+          transform 0.2s;
+      }
+      .radio-group button:hover {
+        background: #e0d8f5;
+        transform: scale(1.04);
+      }
+      .radio-group button.active {
+        background: #9b7fd4;
+        color: #fff;
+        border-color: #9b7fd4;
+      }
+      .med-wrapper {
+        overflow: hidden;
+        transition:
+          max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+          opacity 0.35s ease,
+          margin 0.35s ease;
+        max-height: 80px;
+        opacity: 1;
+        margin-top: 10px;
+      }
+      .med-wrapper.hidden {
+        max-height: 0;
+        opacity: 0;
+        margin-top: 0;
+      }
+      .options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 12px;
+      }
+      .card {
+        flex: 1;
+        min-width: 80px;
+        padding: 10px 6px;
+        border-radius: 15px;
+        text-align: center;
+        font-size: 12px;
+        cursor: pointer;
+        background: #ede8f8;
+        border: 1px solid #c4b0e8;
+        color: #7a62a3;
+        line-height: 1.4;
+        transition:
+          background 0.3s,
+          transform 0.25s;
+      }
+      .card:hover {
+        transform: translateY(-4px) scale(1.04);
+        background: #e0d8f5;
+      }
+      .card.active {
+        background: #9b7fd4;
+        color: #fff;
+        border-color: #9b7fd4;
+      }
+      /* ────────────────────────────────
+     BOTÓN DE CONTINUAR (ocupa todo el ancho)
+     ──────────────────────────────── */
+      .continue-btn {
+        width: 100%;
+        margin-top: 25px;
+        padding: 15px;
+        border-radius: 25px;
+        border: none;
+        background: #9b7fd4;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .continue-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 18px rgba(155, 127, 212, 0.4);
+      }
+      .continue-btn:active {
+        transform: scale(0.97);
+      }
+
+      /* ────────────────────────────────
+     ZONA DE CHAT
+     ──────────────────────────────── */
+      #chat {
+        flex: 1;
+        overflow-y: auto;
+        padding-right: 5px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        margin-bottom: 10px;
+      }
+      .message {
+        max-width: 85%;
+        padding: 0.6rem 1rem;
+        border-radius: 1rem;
+        line-height: 1.4;
+        word-break: break-word;
+        opacity: 0;
+        transform: translateY(10px);
+        animation: enter 0.3s forwards;
+      }
+      @keyframes enter {
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      .user {
+        align-self: flex-end;
+        background: var(--violeta);
+        color: #fff;
+      }
+      .assistant {
+        align-self: flex-start;
+        background: #ede8f8;
+        color: #3d2e60;
+      }
+      .msg {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+      .small-face {
+        width: 28px;
+        height: 28px;
+        background: #ffeb3b;
+        border-radius: 50%;
+        position: relative;
+      }
+      .small-face .eye {
+        width: 4px;
+        height: 4px;
+        background: #000;
+        border-radius: 50%;
+        position: absolute;
+        top: 30%;
+      }
+      .small-face .eye.l {
+        left: 25%;
+      }
+      .small-face .eye.r {
+        right: 25%;
+      }
+      .small-face .mouth {
+        position: absolute;
+        left: 50%;
+        bottom: 20%;
+        transform: translateX(-50%);
+        width: 12px;
+        height: 6px;
+      }
+      .small-face.neutral .mouth {
+        border-bottom: 2px solid #000;
+      }
+      .small-face.positive .mouth {
+        border-bottom: 3px solid #000;
+      }
+      .small-face.negative .mouth {
+        border-top: 3px solid #000;
+        bottom: 30%;
+      }
+      .typing {
+        display: flex;
+        align-items: center;
+      }
+      .typing .dot {
+        width: 6px;
+        height: 6px;
+        background: #555;
+        border-radius: 50%;
+        margin: 0 2px;
+        animation: bounce 0.6s infinite alternate;
+      }
+      .bottom-bar {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
+      #msgInput {
+        flex: 1;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #c4b0e8;
+        background: #ede8f8;
+        font-size: 14px;
+        outline: none;
+      }
+      .send-btn {
+        background: var(--violeta);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 16px;
+        cursor: pointer;
+        font-size: 14px;
+        transition:
+          background 0.2s,
+          transform 0.2s;
+      }
+      .send-btn:hover {
+        background: #5a00c0;
+        transform: scale(1.04);
+      }
+      .send-btn:active {
+        transform: scale(0.96);
+      }
+
+      /* ────────────────────────────────
+     OCULTAR ELEMENTOS (para cambiar de pantalla)
+     ──────────────────────────────── */
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- La etiqueta “nexis.ia” en la esquina superior derecha -->
+      <div class="top-right">nexis.ia</div>
+
+      <!-- ==================== PANTALLA DE REGISTRO ==================== -->
+      <div class="form-screen">
+        <div class="emoji">😏</div>
+        <h1>Nexis Asistente Social IA</h1>
+
+        <label>Nombre</label>
+        <input type="text" placeholder="Tu nombre…" id="nameInput" />
+
+        <label>¿Tienes medicación?</label>
+        <div class="radio-group">
+          <button class="active" id="si-btn" onclick="setMed(true)">Sí</button>
+          <button id="no-btn" onclick="setMed(false)">No</button>
+        </div>
+
+        <div class="med-wrapper" id="med-wrapper">
+          <label>Nombre del medicamento</label>
+          <input type="text" id="med-input" placeholder="Ej.: Sertralina…" />
+        </div>
+
+        <label>¿Por cuánto tiempo usarás la app?</label>
+        <input type="text" placeholder="Ej.: 3 meses, indefinido…" />
+
+        <label>¿Cómo te gustaría usar la app?</label>
+        <div class="options">
+          <div class="card active" onclick="setUso(this)">
+            💬<br />Consejero
+          </div>
+          <div class="card" onclick="setUso(this)">🤝<br />Ayudante</div>
+          <div class="card" onclick="setUso(this)">📓<br />Diario</div>
+          <div class="card" onclick="setUso(this)">🧘<br />Bienestar</div>
+        </div>
+
+        <button class="continue-btn" id="continueBtn">Continuar</button>
+      </div>
+
+      <!-- ==================== PANTALLA DE CHAT ==================== -->
+      <div class="chat-screen hidden">
+        <div id="chat"></div>
+
+        <div class="bottom-bar">
+          <input type="text" id="msgInput" placeholder="Escribe tu mensaje…" />
+          <button class="send-btn" id="sendBtn">Enviar</button>
+        </div>
+      </div>
+
+      <!-- Sonido de “burbuja explotando” -->
+      <audio id="bubbleSound" preload="auto">
+        <source
+          src="data:audio/mp3;base64,//uQxAALCAAQDABAAAAAAAKxAFAAAANjAAABXODr5NgWjA3ACMAAVc9hNkMPwAAAAA="
+          type="audio/mp3"
+        />
+      </audio>
+    </div>
+
+    <script>
+      /* ---------- Funciones del formulario ---------- */
+      function setMed(tiene) {
+        document.getElementById("si-btn").classList.toggle("active", tiene);
+        document.getElementById("no-btn").classList.toggle("active", !tiene);
+        const wrapper = document.getElementById("med-wrapper");
+        const inp = document.getElementById("med-input");
+        wrapper.classList.toggle("hidden", !tiene);
+        inp.disabled = !tiene;
+        if (!tiene) inp.value = "";
+      }
+      function setUso(el) {
+        document
+          .querySelectorAll(".card")
+          .forEach((c) => c.classList.remove("active"));
+        el.classList.add("active");
+      }
+
+      /* ---------- Variables Globales ---------- */
+      const API_URL = "http://187.127.253.96:11434/api/generate";
+      let userData = {};
+      let styleMode = "friendly"; // friendly / caring / compassion
+
+      /* ---------- Utilidades UI ---------- */
+      function addMessage(role, html) {
+        const cont = document.createElement("div");
+        cont.className = `message ${role}`;
+        cont.innerHTML = html;
+        const chat = document.getElementById("chat");
+        chat.appendChild(cont);
+        chat.scrollTop = chat.scrollHeight;
+      }
+
+      /* ---------- Creación de caras amarillas ---------- */
+      function createFace(sent) {
+        const face = document.createElement("div");
+        face.className = `small-face ${sent}`;
+        const eyeL = document.createElement("div");
+        eyeL.className = "eye l";
+        const eyeR = document.createElement("div");
+        eyeR.className = "eye r";
+        const mouth = document.createElement("div");
+        mouth.className = "mouth";
+        face.appendChild(eyeL);
+        face.appendChild(eyeR);
+        face.appendChild(mouth);
+        return face;
+      }
+
+      /* ---------- Sentimiento (muy simple) ---------- */
+      function analyseSentiment(txt) {
+        const pos = [
+          "bien",
+          "genial",
+          "excelente",
+          "fantástico",
+          "perfecto",
+          "gracias",
+          "útil",
+          "😊",
+          "👍",
+        ];
+        const neg = [
+          "mal",
+          "malo",
+          "error",
+          "problema",
+          "no puedo",
+          "triste",
+          "😞",
+          "😔",
+        ];
+        const low = txt.toLowerCase();
+        for (const w of pos) if (low.includes(w)) return "positive";
+        for (const w of neg) if (low.includes(w)) return "negative";
+        return "neutral";
+      }
+
+      /* ---------- Mensajes de usuario y IA ---------- */
+      function addUserMessage(txt) {
+        addMessage("user", `<span>${txt}</span>`);
+        const snd = document.getElementById("bubbleSound");
+        snd.currentTime = 0;
+        snd.play();
+      }
+      function addAIMessage(txt, sentiment) {
+        const face = createFace(sentiment);
+        const html = `<div class="msg"><div>${face.outerHTML}</div><div class="text">${txt}</div></div>`;
+        addMessage("assistant", html);
+      }
+
+      /* ---------- Animación “pensando” (tres puntitos) ---------- */
+      function showThinking() {
+        const face = createFace("neutral");
+        const typing = `<div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+        const html = `<div class="msg"><div>${face.outerHTML}</div>${typing}</div>`;
+        const cont = document.createElement("div");
+        cont.className = "message assistant";
+        cont.innerHTML = html;
+        const chat = document.getElementById("chat");
+        chat.appendChild(cont);
+        chat.scrollTop = chat.scrollHeight;
+        return cont; // se eliminará cuando llegue la respuesta
+      }
+
+      /* ---------- Saludo inicial ---------- */
+      function greetUser() {
+        const txt = `¡Hola ${userData.name}! Soy nexis.ia y estoy aquí para ${styleMode} ayudarte.`;
+        addAIMessage(txt, "neutral");
+      }
+
+      /* ---------- Llamada al modelo Ollama ---------- */
+      async function askLLM(prompt) {
+        const payload = { model: "llama3.2:3b", prompt, stream: false };
+        try {
+          const r = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          if (!r.ok) throw new Error(`HTTP ${r.status}`);
+          const data = await r.json();
+          return data.response ?? "[Sin respuesta]";
+        } catch (e) {
+          console.error(e);
+          return `Error: ${e.message}`;
+        }
+      }
+
+      /* ---------- Envío del mensaje del usuario ---------- */
+      async function sendMessage() {
+        const input = document.getElementById("msgInput");
+        const txt = input.value.trim();
+        if (!txt) return;
+        addUserMessage(txt);
+        input.value = "";
+        const thinking = showThinking();
+        const reply = await askLLM(txt);
+        thinking.remove();
+        const sentiment = analyseSentiment(reply);
+        addAIMessage(reply, sentiment);
+      }
+
+      /* ---------- Lógica del paso registro → chat ---------- */
+      document.getElementById("continueBtn").addEventListener("click", () => {
+        const name = document.getElementById("nameInput").value.trim();
+        if (!name) {
+          alert("Introduce tu nombre");
+          return;
+        }
+        const hasMed = document
+          .getElementById("si-btn")
+          .classList.contains("active");
+        const med = hasMed
+          ? document.getElementById("med-input").value.trim()
+          : "";
+        const card = document.querySelector(".card.active");
+        const help = card ? card.textContent.trim() : "Consejero";
+
+        // Selección de tono según la categoría elegida
+        if (help.includes("Consejero")) styleMode = "friendly";
+        else if (help.includes("Ayudante")) styleMode = "caring";
+        else if (help.includes("Diario")) styleMode = "compassion";
+        else styleMode = "friendly";
+
+        userData = { name, hasMed, med, help };
+
+        // Cambiar de pantalla
+        document.querySelector(".form-screen").classList.add("hidden");
+        document.querySelector(".chat-screen").classList.remove("hidden");
+
+        greetUser();
+      });
+
+      /* ---------- Eventos del chat ---------- */
+      document.getElementById("sendBtn").addEventListener("click", sendMessage);
+      document.getElementById("msgInput").addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -32,6 +32,10 @@
         --ai-bg: #ede8f8;
 
         --r: 10px;
+
+        --error: #e24b4a;
+        --error-bg: #fcebeb;
+        --error-border: #f09595;
       }
 
       *,
@@ -79,7 +83,6 @@
         gap: 10px;
       }
 
-      /* mascota pequeña en topbar */
       .mascot-mini {
         width: 26px;
         height: 26px;
@@ -162,7 +165,6 @@
         }
       }
 
-      /* mascota grande en setup */
       .mascot-big {
         width: 64px;
         height: 64px;
@@ -249,6 +251,16 @@
         text-transform: uppercase;
         margin-bottom: 7px;
       }
+
+      /* campo requerido: asterisco */
+      .field label .req {
+        color: var(--error);
+        margin-left: 3px;
+        font-size: 13px;
+        line-height: 1;
+        vertical-align: middle;
+      }
+
       .field input[type="text"] {
         width: 100%;
         background: var(--surface2);
@@ -271,6 +283,64 @@
         background: #e8e2f8;
         border-color: var(--violet-m);
         box-shadow: 0 0 0 3px rgba(155, 127, 212, 0.15);
+      }
+
+      /* estado de error en input */
+      .field input[type="text"].input-error {
+        background: var(--error-bg);
+        border-color: var(--error-border);
+        box-shadow: 0 0 0 3px rgba(226, 75, 74, 0.12);
+      }
+      .field input[type="text"].input-error:focus {
+        border-color: var(--error);
+        box-shadow: 0 0 0 3px rgba(226, 75, 74, 0.18);
+      }
+
+      /* mensaje de error debajo del input */
+      .field-error-msg {
+        display: none;
+        font-family: "Geist Mono", monospace;
+        font-size: 11px;
+        color: var(--error);
+        margin-top: 5px;
+        padding-left: 2px;
+        animation: fadeIn 0.2s ease;
+      }
+      .field-error-msg.visible {
+        display: block;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-3px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* shake animation para feedback de error */
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        20% {
+          transform: translateX(-6px);
+        }
+        40% {
+          transform: translateX(6px);
+        }
+        60% {
+          transform: translateX(-4px);
+        }
+        80% {
+          transform: translateX(4px);
+        }
+      }
+      .shake {
+        animation: shake 0.38s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
       }
 
       .toggle-row {
@@ -364,9 +434,27 @@
         font-weight: 500;
       }
 
+      /* banner de error general arriba del botón */
+      .form-error-banner {
+        display: none;
+        background: var(--error-bg);
+        border: 1px solid var(--error-border);
+        border-radius: var(--r);
+        padding: 10px 14px;
+        margin-top: 18px;
+        font-size: 13px;
+        color: var(--error);
+        font-family: "Geist", sans-serif;
+        animation: fadeIn 0.2s ease;
+        text-align: center;
+      }
+      .form-error-banner.visible {
+        display: block;
+      }
+
       .setup-btn {
         width: 100%;
-        margin-top: 24px;
+        margin-top: 14px;
         padding: 13px;
         border-radius: 50px;
         border: none;
@@ -399,7 +487,6 @@
         min-height: 0;
       }
 
-      /* sidebar */
       .sidebar {
         width: 210px;
         flex-shrink: 0;
@@ -470,7 +557,6 @@
         color: var(--text-2);
       }
 
-      /* main */
       .chat-main {
         flex: 1;
         display: flex;
@@ -507,7 +593,6 @@
         color: var(--violet-m);
       }
 
-      /* messages */
       #chat {
         flex: 1;
         overflow-y: auto;
@@ -572,7 +657,6 @@
         flex-direction: row-reverse;
       }
 
-      /* carita mascota */
       .face {
         width: 30px;
         height: 30px;
@@ -639,7 +723,6 @@
         border-bottom-left-radius: 4px;
       }
 
-      /* typing dots */
       .typing-dots {
         display: flex;
         gap: 4px;
@@ -687,7 +770,6 @@
         letter-spacing: 0.05em;
       }
 
-      /* input bar */
       .input-area {
         border-top: 1px solid var(--border);
         padding: 14px 20px;
@@ -786,16 +868,23 @@
         <div class="setup-header">
           <div class="eyebrow">configuración inicial</div>
           <h1>Bienvenido a <em>nexis.ia</em></h1>
-          <p>Tu asistente social de IA. Cuéntanos un poco antes de empezar.</p>
+          <p>
+            Tu asistente social de IA. Completa todos los campos para continuar.
+          </p>
         </div>
 
-        <div class="field">
-          <label>Nombre</label>
+        <!-- Nombre -->
+        <div class="field" id="field-name">
+          <label>Nombre <span class="req">*</span></label>
           <input type="text" id="nameInput" placeholder="Tu nombre…" />
+          <div class="field-error-msg" id="err-name">
+            Por favor, escribe tu nombre.
+          </div>
         </div>
 
+        <!-- Medicación -->
         <div class="field">
-          <label>¿Tienes medicación?</label>
+          <label>¿Tienes medicación? <span class="req">*</span></label>
           <div class="toggle-row">
             <button
               class="toggle-btn active"
@@ -809,28 +898,36 @@
             </button>
           </div>
           <div class="med-slide" id="med-slide">
-            <div class="field">
-              <label>Medicamento</label>
+            <div class="field" id="field-med">
+              <label>Medicamento <span class="req">*</span></label>
               <input
                 type="text"
                 id="med-input"
                 placeholder="Ej.: Sertralina…"
               />
+              <div class="field-error-msg" id="err-med">
+                Por favor, indica tu medicamento.
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="field">
-          <label>Duración de uso</label>
+        <!-- Duración -->
+        <div class="field" id="field-duration">
+          <label>Duración de uso <span class="req">*</span></label>
           <input
             type="text"
             id="durationInput"
             placeholder="Ej.: 3 meses, indefinido…"
           />
+          <div class="field-error-msg" id="err-duration">
+            Por favor, indica la duración de uso.
+          </div>
         </div>
 
+        <!-- Modo -->
         <div class="field">
-          <label>Modo de uso</label>
+          <label>Modo de uso <span class="req">*</span></label>
           <div class="mode-grid">
             <div class="mode-card active" onclick="setUso(this)">
               <div class="mode-icon">💬</div>
@@ -849,6 +946,10 @@
               <div class="mode-label">Bienestar</div>
             </div>
           </div>
+        </div>
+
+        <div class="form-error-banner" id="form-banner">
+          ⚠️ Completa todos los campos obligatorios para continuar.
         </div>
 
         <button class="setup-btn" id="continueBtn">Iniciar sesión →</button>
@@ -923,6 +1024,7 @@
     </audio>
 
     <script>
+      /* ── helpers ── */
       function setMed(tiene) {
         document.getElementById("si-btn").classList.toggle("active", tiene);
         document.getElementById("no-btn").classList.toggle("active", !tiene);
@@ -930,8 +1032,12 @@
         const inp = document.getElementById("med-input");
         slide.classList.toggle("collapsed", !tiene);
         inp.disabled = !tiene;
-        if (!tiene) inp.value = "";
+        if (!tiene) {
+          inp.value = "";
+          clearError("med-input", "err-med");
+        }
       }
+
       function setUso(el) {
         document
           .querySelectorAll(".mode-card")
@@ -939,10 +1045,105 @@
         el.classList.add("active");
       }
 
+      /* ── validación ── */
+      function setError(inputId, msgId) {
+        const inp = document.getElementById(inputId);
+        const msg = document.getElementById(msgId);
+        inp.classList.add("input-error");
+        msg.classList.add("visible");
+      }
+
+      function clearError(inputId, msgId) {
+        const inp = document.getElementById(inputId);
+        const msg = document.getElementById(msgId);
+        inp.classList.remove("input-error");
+        msg.classList.remove("visible");
+      }
+
+      function triggerShake(el) {
+        el.classList.remove("shake");
+        void el.offsetWidth; /* reflow para reiniciar */
+        el.classList.add("shake");
+        el.addEventListener(
+          "animationend",
+          () => el.classList.remove("shake"),
+          { once: true },
+        );
+      }
+
+      function validateForm() {
+        let valid = true;
+        const card = document.querySelector(".setup-card");
+
+        /* nombre */
+        const name = document.getElementById("nameInput").value.trim();
+        if (!name) {
+          setError("nameInput", "err-name");
+          valid = false;
+        } else {
+          clearError("nameInput", "err-name");
+        }
+
+        /* medicamento (solo si "Sí" está activo) */
+        const hasMed = document
+          .getElementById("si-btn")
+          .classList.contains("active");
+        if (hasMed) {
+          const med = document.getElementById("med-input").value.trim();
+          if (!med) {
+            setError("med-input", "err-med");
+            valid = false;
+          } else {
+            clearError("med-input", "err-med");
+          }
+        }
+
+        /* duración */
+        const dur = document.getElementById("durationInput").value.trim();
+        if (!dur) {
+          setError("durationInput", "err-duration");
+          valid = false;
+        } else {
+          clearError("durationInput", "err-duration");
+        }
+
+        const banner = document.getElementById("form-banner");
+        if (!valid) {
+          banner.classList.add("visible");
+          triggerShake(card);
+        } else {
+          banner.classList.remove("visible");
+        }
+
+        return valid;
+      }
+
+      /* limpiar error al escribir */
+      ["nameInput", "med-input", "durationInput"].forEach((id) => {
+        const errMap = {
+          nameInput: "err-name",
+          "med-input": "err-med",
+          durationInput: "err-duration",
+        };
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener("input", () => {
+            if (el.value.trim()) {
+              clearError(id, errMap[id]);
+              if (!document.querySelector(".field input.input-error")) {
+                document
+                  .getElementById("form-banner")
+                  .classList.remove("visible");
+              }
+            }
+          });
+        }
+      });
+
+      /* ── API ── */
       const API_URL = "http://187.127.253.96:11434/api/generate";
       let userData = {};
 
-      /* carita con sentimiento */
       function makeFace(sentiment) {
         const f = document.createElement("div");
         f.className = `face ${sentiment}`;
@@ -1037,6 +1238,7 @@
         snd.currentTime = 0;
         snd.play().catch(() => {});
       }
+
       function addAIMsg(txt) {
         const sentiment = analyseSentiment(txt);
         addGroup("assistant", txt, sentiment);
@@ -1075,13 +1277,11 @@
         addAIMsg(reply);
       }
 
+      /* ── continuar ── */
       document.getElementById("continueBtn").addEventListener("click", () => {
-        const name = document.getElementById("nameInput").value.trim();
-        if (!name) {
-          alert("Introduce tu nombre");
-          return;
-        }
+        if (!validateForm()) return;
 
+        const name = document.getElementById("nameInput").value.trim();
         const hasMed = document
           .getElementById("si-btn")
           .classList.contains("active");

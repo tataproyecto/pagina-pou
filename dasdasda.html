@@ -8,10 +8,10 @@
    VARIABLES DE COLOR (violeta / lila / lavanda)
    ──────────────────────── */
       :root {
-        --violeta: #7f00ff; /* color principal    */
-        --lila: #c8a2c8; /* acento            */
-        --lavanda: #e6e6fa; /* fondo claro       */
-        --bg-dark: #2b0a3b; /* degradado oscuro  */
+        --violeta: #7f00ff; /* color principal */
+        --lila: #c8a2c8; /* acento */
+        --lavanda: #e6e6fa; /* fondo claro */
+        --bg-dark: #2b0a3b; /* degradado oscuro */
         --bg-dark2: #3d185f;
       }
 
@@ -124,7 +124,6 @@
         border-radius: 10px;
         border: 1px solid #c4b0e8;
         background: #ede8f8;
-        color: #3d2e60;
         font-size: 14px;
         transition:
           background 0.3s,
@@ -264,18 +263,14 @@
         align-self: flex-end;
         background: var(--lila);
         color: #111;
-        border: 1px solid #a185b5;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
       }
       .message.assistant {
         align-self: flex-start;
         background: var(--lila);
         color: #111;
-        border: 1px solid #a185b5;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
       }
 
-      /* cara amarilla que acompaña a cada mensaje */
+      /* cara amarilla al lado del mensaje */
       .msg {
         display: flex;
         align-items: center;
@@ -450,21 +445,15 @@
     </div>
 
     <script>
-      /* =====================================================
-   CONFIGURACIÓN
-   ===================================================== */
+      /* ---------- CONFIG ---------- */
       const API_URL = "http://187.127.253.96:11434/api/generate";
 
-      /* =====================================================
-   ESTADO GLOBAL
-   ===================================================== */
+      /* ---------- ESTADO ---------- */
       let userData = {}; // datos del registro
-      let conversation = []; // [{role:'user'|'assistant', text:'', sentiment:'neutral|positive|negative'}]
+      let conversation = []; // historial [{role,text,sentiment}]
       let styleMode = "friendly"; // friendly / caring / compassion
 
-      /* -----------------------------------------------------
-   FUNCIONES DE STORAGE (localStorage)
-   ----------------------------------------------------- */
+      /* ---------- STORAGE ---------- */
       function saveUser() {
         localStorage.setItem("nexis_user", JSON.stringify(userData));
       }
@@ -478,9 +467,7 @@
         return JSON.parse(localStorage.getItem("nexis_chat") || "[]");
       }
 
-      /* -----------------------------------------------------
-   UI – Registro
-   ----------------------------------------------------- */
+      /* ---------- UI HELPERS (registro) ---------- */
       function setMed(tiene) {
         document.getElementById("si-btn").classList.toggle("active", tiene);
         document.getElementById("no-btn").classList.toggle("active", !tiene);
@@ -497,12 +484,10 @@
         el.classList.add("active");
       }
 
-      /* -----------------------------------------------------
-   CARA AMARILLA
-   ----------------------------------------------------- */
-      function createFace(sentiment) {
+      /* ---------- CARA AMARILLA ---------- */
+      function createFace(sent) {
         const face = document.createElement("div");
-        face.className = `small-face ${sentiment}`;
+        face.className = `small-face ${sent}`;
         const eyeL = document.createElement("div");
         eyeL.className = "eye l";
         const eyeR = document.createElement("div");
@@ -515,9 +500,7 @@
         return face;
       }
 
-      /* -----------------------------------------------------
-   SENTIMIENTO (básico)
-   ----------------------------------------------------- */
+      /* ---------- ANÁLISIS DE SENTIMIENTO (muy simple) ---------- */
       function analyseSentiment(txt) {
         const pos = [
           "bien",
@@ -546,9 +529,7 @@
         return "neutral";
       }
 
-      /* -----------------------------------------------------
-   RENDER DE MENSAJES
-   ----------------------------------------------------- */
+      /* ---------- RENDER DE MENSAJES ---------- */
       function renderMessage(msg) {
         if (msg.role === "user") {
           return `<span>${msg.text}</span>`;
@@ -576,9 +557,7 @@
         saveConversation();
       }
 
-      /* -----------------------------------------------------
-   ANIMACIÓN “PENSANDO”
-   ----------------------------------------------------- */
+      /* ---------- ANIMACIÓN “PENSANDO” ---------- */
       function showThinking() {
         const face = createFace("neutral");
         const typing = `<div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
@@ -589,12 +568,10 @@
         const chat = document.getElementById("chat");
         chat.appendChild(cont);
         chat.scrollTop = chat.scrollHeight;
-        return cont; // lo quitaremos cuando llegue la respuesta
+        return cont; // lo quitaremos más tarde
       }
 
-      /* -----------------------------------------------------
-   SALUDO INICIAL (después de registrar)
-   ----------------------------------------------------- */
+      /* ---------- SALUDO INICIAL ---------- */
       function greetUser() {
         const txt = `¡Hola ${userData.name}! Soy nexis.ia y estoy aquí para ${styleMode} ayudarte.`;
         addChatMessage(
@@ -603,15 +580,9 @@
         );
       }
 
-      /* -----------------------------------------------------
-   PETICIÓN AL MODELO (Ollama)
-   ----------------------------------------------------- */
+      /* ---------- PETICIÓN A OLLAMA ---------- */
       async function askLLM(prompt) {
         const payload = { model: "llama3.2:3b", prompt, stream: false };
-
-        /* -------------------------------------------------
-     1️⃣  MODO REAL (requiere CORS habilitado)
-     ------------------------------------------------- */
         try {
           const r = await fetch(API_URL, {
             method: "POST",
@@ -622,21 +593,12 @@
           const data = await r.json();
           return data.response ?? "[Sin respuesta]";
         } catch (e) {
-          console.error("Error al conectar con Ollama →", e);
+          console.error(e);
           return `Error: ${e.message}`;
         }
-
-        /* -------------------------------------------------
-     2️⃣  MODO SIMULADO (para pruebas sin servidor)
-        — simplemente descomenta la línea siguiente y comenta
-        el bloque anterior.
-     ------------------------------------------------- */
-        // return new Promise(res=>setTimeout(()=>res('Respuesta simulada de Nexis IA.'),1200));
       }
 
-      /* -----------------------------------------------------
-   ENVIAR MENSAJE
-   ----------------------------------------------------- */
+      /* ---------- ENVIAR MENSAJE ---------- */
       async function sendMessage() {
         const input = document.getElementById("msgInput");
         const txt = input.value.trim();
@@ -652,15 +614,13 @@
         addChatMessage({ role: "assistant", text: reply, sentiment }, false);
       }
 
-      /* -----------------------------------------------------
-   INICIALIZAR APP (carga de datos)
-   ----------------------------------------------------- */
+      /* ---------- INICIALIZAR APP ---------- */
       function init() {
         const savedUser = loadUser();
         const savedConv = loadConversation();
 
         if (savedUser && savedConv.length) {
-          /* ----------- Hay datos → vamos directo al chat ----------- */
+          /* Ya hay datos → saltamos al chat directamente */
           userData = savedUser;
           conversation = savedConv;
           document.getElementById("formScreen").classList.add("hidden");
@@ -669,23 +629,21 @@
           // renderizamos historial sin reproducir sonidos
           savedConv.forEach((m) => addChatMessage(m, false));
 
-          // establecer tono según la opción guardada
-          const opt = userData.help || "";
-          if (opt.includes("Consejero")) styleMode = "friendly";
-          else if (opt.includes("Ayudante")) styleMode = "caring";
-          else if (opt.includes("Diario")) styleMode = "compassion";
+          // definir modo de respuesta según la opción elegida
+          const h = userData.help || "";
+          if (h.includes("Consejero")) styleMode = "friendly";
+          else if (h.includes("Ayudante")) styleMode = "caring";
+          else if (h.includes("Diario")) styleMode = "compassion";
           else styleMode = "friendly";
         } else {
-          /* ----------- Primera visita → pantalla de registro ----------- */
+          /* Primera visita → mostramos el registro */
           document.getElementById("formScreen").classList.remove("hidden");
           document.getElementById("chatScreen").classList.add("hidden");
         }
       }
       document.addEventListener("DOMContentLoaded", init);
 
-      /* -----------------------------------------------------
-   EVENTOS DE INTERACCIÓN
-   ----------------------------------------------------- */
+      /* ---------- EVENTOS ---------- */
       // Registro → pasar al chat
       document.getElementById("continueBtn").addEventListener("click", () => {
         const name = document.getElementById("nameInput").value.trim();
@@ -703,23 +661,23 @@
         const card = document.querySelector(".card.active");
         const help = card ? card.textContent.trim() : "Consejero";
 
-        // definir tono según la opción elegida
+        // Definir tono de respuesta
         if (help.includes("Consejero")) styleMode = "friendly";
         else if (help.includes("Ayudante")) styleMode = "caring";
         else if (help.includes("Diario")) styleMode = "compassion";
         else styleMode = "friendly";
 
-        // guardar datos y resetear historial
+        // Guardar datos y limpiar historial anterior (comenzamos de cero)
         userData = { name, hasMed, med, help };
         saveUser();
         conversation = [];
         saveConversation();
 
-        // cambiar pantalla
+        // Cambiar pantalla
         document.getElementById("formScreen").classList.add("hidden");
         document.getElementById("chatScreen").classList.remove("hidden");
 
-        // saludo inicial
+        // Saludo inicial
         greetUser();
       });
 

@@ -2,255 +2,542 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <title>nexis.ia – Asistente Social IA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>nexis.ia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500&family=Geist:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      /* ────────────────────────────────
-     VARIABLES DE COLOR (Violeta / Lila / Lavanda)
-     ──────────────────────────────── */
       :root {
-        --violeta: #7f00ff;
+        --bg: #f0ecff;
+        --surface: #f8f5ff;
+        --surface2: #ede8f8;
+        --border: #d4c8ed;
+        --border2: #b8a8dc;
+
+        --violet: #7f00ff;
+        --violet-m: #9b7fd4;
+        --accent: #7f00ff;
         --lila: #c8a2c8;
         --lavanda: #e6e6fa;
-        --bg-gradient: radial-gradient(
-          circle at top,
-          var(--lila),
-          var(--lavanda)
-        );
-        --bg-app: #f3effc;
-        --border: #d4c8ed;
+
+        --text: #3d2e60;
+        --text-2: #7a62a3;
+        --text-3: #b0a0cc;
+
+        --user-bg: linear-gradient(135deg, #9b7fd4, #7f00ff);
+        --ai-bg: #ede8f8;
+
+        --r: 10px;
       }
 
-      /* ────────────────────────────────
-     BODY – centra la app
-     ──────────────────────────────── */
-      body {
-        margin: 0;
-        font-family: "Segoe UI", sans-serif;
-        background: var(--bg-gradient);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-      }
-
-      /* ────────────────────────────────
-     CONTENEDOR PRINCIPAL (versión desktop)
-     ──────────────────────────────── */
-      .app {
-        width: 100%;
-        max-width: 800px;
-        min-height: 80vh;
-        background: var(--bg-app);
-        border: 1px solid var(--border);
-        border-radius: 20px;
-        box-shadow: 0 20px 40px rgba(130, 100, 200, 0.15);
-        color: #3d2e60;
+      *,
+      *::before,
+      *::after {
         box-sizing: border-box;
-        padding: 30px 25px;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        font-family: "Geist", "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        height: 100vh;
         display: flex;
         flex-direction: column;
-        animation: fadeIn 0.8s ease;
-        position: relative; /* para la etiqueta superior derecha */
+        overflow: hidden;
       }
 
-      .top-right {
+      /* ── TOPBAR ── */
+      .topbar {
+        height: 50px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        flex-shrink: 0;
+        background: var(--surface);
+        box-shadow: 0 1px 0 var(--border);
+      }
+      .topbar-logo {
+        font-family: "Geist Mono", monospace;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--violet-m);
+        letter-spacing: 0.04em;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      /* mascota pequeña en topbar */
+      .mascot-mini {
+        width: 26px;
+        height: 26px;
+        background: #ffeb3b;
+        border-radius: 50%;
+        position: relative;
+        flex-shrink: 0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
+      .mascot-mini .eye {
+        width: 4px;
+        height: 4px;
+        background: #333;
+        border-radius: 50%;
         position: absolute;
-        top: 15px;
-        right: 20px;
-        font-size: 13px;
-        color: #7a62a3;
+        top: 28%;
+      }
+      .mascot-mini .eye.l {
+        left: 24%;
+      }
+      .mascot-mini .eye.r {
+        right: 24%;
+      }
+      .mascot-mini .mouth {
+        position: absolute;
+        left: 50%;
+        bottom: 22%;
+        transform: translateX(-50%);
+        width: 10px;
+        height: 5px;
+        border-bottom: 2px solid #333;
+        border-radius: 0 0 6px 6px;
       }
 
-      @keyframes fadeIn {
+      .topbar-model {
+        font-family: "Geist Mono", monospace;
+        font-size: 11px;
+        color: var(--text-3);
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        padding: 3px 10px;
+        border-radius: 4px;
+      }
+
+      /* ── SETUP SCREEN ── */
+      .setup-screen {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 32px 16px;
+        overflow-y: auto;
+        background: radial-gradient(
+          ellipse at 30% 0%,
+          #d4b8f0 0%,
+          #e8e0f8 40%,
+          #f0ecff 100%
+        );
+      }
+      .setup-card {
+        width: 100%;
+        max-width: 460px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 36px 32px;
+        box-shadow:
+          0 20px 40px rgba(130, 100, 200, 0.12),
+          inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        animation: rise 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      @keyframes rise {
         from {
           opacity: 0;
-          transform: translateY(30px) scale(0.96);
+          transform: translateY(20px);
         }
         to {
           opacity: 1;
-          transform: translateY(0) scale(1);
+          transform: translateY(0);
         }
+      }
+
+      /* mascota grande en setup */
+      .mascot-big {
+        width: 64px;
+        height: 64px;
+        background: #ffeb3b;
+        border-radius: 50%;
+        position: relative;
+        margin: 0 auto 16px;
+        box-shadow: 0 6px 20px rgba(255, 235, 59, 0.35);
+        animation: float 3.5s ease-in-out infinite;
       }
       @keyframes float {
         0%,
         100% {
-          transform: translateY(0);
+          transform: translateY(0) rotate(-2deg);
         }
         50% {
-          transform: translateY(-8px);
+          transform: translateY(-8px) rotate(2deg);
         }
       }
-      @keyframes bounce {
-        to {
-          transform: translateY(-6px);
-        }
+      .mascot-big .eye {
+        width: 7px;
+        height: 7px;
+        background: #333;
+        border-radius: 50%;
+        position: absolute;
+        top: 30%;
+      }
+      .mascot-big .eye.l {
+        left: 24%;
+      }
+      .mascot-big .eye.r {
+        right: 24%;
+      }
+      .mascot-big .mouth {
+        position: absolute;
+        left: 50%;
+        bottom: 20%;
+        transform: translateX(-50%);
+        width: 22px;
+        height: 10px;
+        border-bottom: 3px solid #333;
+        border-radius: 0 0 12px 12px;
       }
 
-      /* ────────────────────────────────
-     ELEMENTOS COMUNES (emoji, títulos, inputs…)
-     ──────────────────────────────── */
-      .emoji {
+      .setup-header {
+        margin-bottom: 26px;
         text-align: center;
-        font-size: 70px;
-        margin-bottom: 15px;
-        animation: float 3s infinite ease-in-out;
       }
-      h1 {
+      .setup-header .eyebrow {
+        font-family: "Geist Mono", monospace;
+        font-size: 11px;
+        color: var(--violet-m);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+      }
+      .setup-header h1 {
         font-size: 22px;
-        text-align: center;
-        margin: 0 0 25px;
         font-weight: 500;
-        color: #5a4480;
+        color: var(--text);
+        letter-spacing: -0.02em;
+        line-height: 1.2;
       }
-      label {
-        font-size: 14px;
+      .setup-header h1 em {
+        font-style: normal;
+        color: var(--violet-m);
+      }
+      .setup-header p {
+        font-size: 13px;
+        color: var(--text-2);
+        margin-top: 6px;
+        line-height: 1.5;
+      }
+
+      .field {
+        margin-bottom: 18px;
+      }
+      .field label {
         display: block;
-        margin: 14px 0 5px;
-        color: #7a62a3;
+        font-family: "Geist Mono", monospace;
+        font-size: 11px;
+        color: var(--text-2);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 7px;
       }
-      input[type="text"] {
+      .field input[type="text"] {
         width: 100%;
-        padding: 10px 12px;
-        border-radius: 10px;
-        border: 1px solid #c4b0e8;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        padding: 10px 13px;
+        color: var(--text);
+        font-family: "Geist", sans-serif;
+        font-size: 14px;
         outline: none;
-        background: #ede8f8;
-        color: #3d2e60;
-        font-size: 14px;
-        box-sizing: border-box;
         transition:
-          background 0.3s,
-          box-shadow 0.3s,
-          transform 0.3s;
+          border-color 0.2s,
+          box-shadow 0.2s,
+          background 0.2s;
       }
-      input[type="text"]::placeholder {
-        color: #b0a0cc;
+      .field input[type="text"]::placeholder {
+        color: var(--text-3);
       }
-      input[type="text"]:focus {
+      .field input[type="text"]:focus {
         background: #e8e2f8;
-        border-color: #9b7fd4;
-        box-shadow: 0 0 8px rgba(155, 127, 212, 0.3);
-        transform: scale(1.02);
+        border-color: var(--violet-m);
+        box-shadow: 0 0 0 3px rgba(155, 127, 212, 0.15);
       }
-      .radio-group {
+
+      .toggle-row {
         display: flex;
-        gap: 10px;
-        margin: 8px 0 0;
+        gap: 8px;
       }
-      .radio-group button {
+      .toggle-btn {
         flex: 1;
-        padding: 10px;
-        border-radius: 10px;
-        border: 1px solid #c4b0e8;
-        background: #ede8f8;
-        color: #7a62a3;
+        padding: 9px;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        color: var(--text-2);
+        font-family: "Geist", sans-serif;
+        font-size: 13px;
+        font-weight: 500;
         cursor: pointer;
-        font-size: 14px;
         transition:
-          background 0.3s,
-          transform 0.2s;
+          border-color 0.2s,
+          color 0.2s,
+          background 0.2s,
+          box-shadow 0.2s;
       }
-      .radio-group button:hover {
+      .toggle-btn:hover {
         background: #e0d8f5;
-        transform: scale(1.04);
+        color: var(--text);
       }
-      .radio-group button.active {
-        background: #9b7fd4;
+      .toggle-btn.active {
+        background: var(--violet-m);
+        border-color: var(--violet-m);
         color: #fff;
-        border-color: #9b7fd4;
+        box-shadow: 0 4px 12px rgba(155, 127, 212, 0.3);
       }
-      .med-wrapper {
+
+      .med-slide {
         overflow: hidden;
         transition:
-          max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-          opacity 0.35s ease,
-          margin 0.35s ease;
-        max-height: 80px;
+          max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+          opacity 0.3s;
+        max-height: 90px;
         opacity: 1;
-        margin-top: 10px;
       }
-      .med-wrapper.hidden {
+      .med-slide.collapsed {
         max-height: 0;
         opacity: 0;
-        margin-top: 0;
       }
-      .options {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 12px;
+      .med-slide .field {
+        margin-top: 14px;
+        margin-bottom: 0;
       }
-      .card {
-        flex: 1;
-        min-width: 80px;
-        padding: 10px 6px;
-        border-radius: 15px;
+
+      .mode-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+      .mode-card {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        padding: 12px 8px;
         text-align: center;
-        font-size: 12px;
-        cursor: pointer;
-        background: #ede8f8;
-        border: 1px solid #c4b0e8;
-        color: #7a62a3;
-        line-height: 1.4;
-        transition:
-          background 0.3s,
-          transform 0.25s;
-      }
-      .card:hover {
-        transform: translateY(-4px) scale(1.04);
-        background: #e0d8f5;
-      }
-      .card.active {
-        background: #9b7fd4;
-        color: #fff;
-        border-color: #9b7fd4;
-      }
-      /* ────────────────────────────────
-     BOTÓN DE CONTINUAR (ocupa todo el ancho)
-     ──────────────────────────────── */
-      .continue-btn {
-        width: 100%;
-        margin-top: 25px;
-        padding: 15px;
-        border-radius: 25px;
-        border: none;
-        background: #9b7fd4;
-        color: #fff;
-        font-size: 16px;
         cursor: pointer;
         transition:
+          border-color 0.2s,
+          background 0.2s,
           transform 0.2s,
           box-shadow 0.2s;
       }
-      .continue-btn:hover {
-        transform: scale(1.05);
-        box-shadow: 0 4px 18px rgba(155, 127, 212, 0.4);
+      .mode-card:hover {
+        background: #e0d8f5;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 14px rgba(155, 127, 212, 0.12);
       }
-      .continue-btn:active {
+      .mode-card.active {
+        border-color: var(--violet-m);
+        background: rgba(155, 127, 212, 0.15);
+        box-shadow: 0 4px 14px rgba(155, 127, 212, 0.2);
+      }
+      .mode-card .mode-icon {
+        font-size: 20px;
+        margin-bottom: 5px;
+      }
+      .mode-card .mode-label {
+        font-size: 11px;
+        color: var(--text-2);
+        font-family: "Geist Mono", monospace;
+      }
+      .mode-card.active .mode-label {
+        color: var(--violet-m);
+        font-weight: 500;
+      }
+
+      .setup-btn {
+        width: 100%;
+        margin-top: 24px;
+        padding: 13px;
+        border-radius: 50px;
+        border: none;
+        background: linear-gradient(135deg, #9b7fd4, #7f00ff);
+        color: #fff;
+        font-family: "Geist", sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition:
+          transform 0.15s,
+          box-shadow 0.2s,
+          filter 0.2s;
+        box-shadow: 0 6px 20px rgba(127, 0, 255, 0.28);
+      }
+      .setup-btn:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 10px 28px rgba(127, 0, 255, 0.38);
+        filter: brightness(1.05);
+      }
+      .setup-btn:active {
         transform: scale(0.97);
       }
 
-      /* ────────────────────────────────
-     ZONA DE CHAT
-     ──────────────────────────────── */
+      /* ── CHAT SCREEN ── */
+      .chat-screen {
+        flex: 1;
+        display: flex;
+        overflow: hidden;
+        min-height: 0;
+      }
+
+      /* sidebar */
+      .sidebar {
+        width: 210px;
+        flex-shrink: 0;
+        background: var(--surface);
+        border-right: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        padding: 16px 12px;
+        gap: 4px;
+      }
+      .sidebar-label {
+        font-family: "Geist Mono", monospace;
+        font-size: 10px;
+        color: var(--text-3);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 0 8px;
+        margin-bottom: 6px;
+      }
+      .sidebar-item {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 8px 10px;
+        border-radius: 8px;
+        font-size: 13px;
+        color: var(--text-2);
+        cursor: pointer;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
+      .sidebar-item:hover {
+        background: var(--surface2);
+        color: var(--text);
+      }
+      .sidebar-item.active {
+        background: rgba(155, 127, 212, 0.15);
+        color: var(--violet-m);
+      }
+      .sidebar-item .si-icon {
+        font-size: 15px;
+      }
+
+      .sidebar-user {
+        margin-top: auto;
+        padding: 10px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .sidebar-avatar {
+        width: 28px;
+        height: 28px;
+        background: linear-gradient(135deg, var(--violet-m), var(--violet));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 600;
+        color: #fff;
+        flex-shrink: 0;
+      }
+      .sidebar-name {
+        font-size: 13px;
+        color: var(--text-2);
+      }
+
+      /* main */
+      .chat-main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        min-height: 0;
+      }
+
+      .chat-header {
+        height: 46px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        gap: 10px;
+        flex-shrink: 0;
+        background: var(--surface);
+      }
+      .chat-header-mode {
+        font-family: "Geist Mono", monospace;
+        font-size: 12px;
+        color: var(--text-2);
+      }
+      .chat-header-sep {
+        color: var(--border2);
+      }
+      .chat-header-status {
+        margin-left: auto;
+        font-family: "Geist Mono", monospace;
+        font-size: 11px;
+        color: var(--text-3);
+      }
+      .ch-dot {
+        color: var(--violet-m);
+      }
+
+      /* messages */
       #chat {
         flex: 1;
         overflow-y: auto;
-        padding-right: 5px;
+        padding: 24px 20px;
         display: flex;
         flex-direction: column;
-        gap: 0.6rem;
-        margin-bottom: 10px;
+        gap: 4px;
+        scroll-behavior: smooth;
+        min-height: 0;
+        background: var(--bg);
       }
-      .message {
-        max-width: 85%;
-        padding: 0.6rem 1rem;
-        border-radius: 1rem;
-        line-height: 1.4;
-        word-break: break-word;
+      #chat::-webkit-scrollbar {
+        width: 4px;
+      }
+      #chat::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      #chat::-webkit-scrollbar-thumb {
+        background: var(--border2);
+        border-radius: 4px;
+      }
+
+      .msg-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-bottom: 14px;
         opacity: 0;
-        transform: translateY(10px);
-        animation: enter 0.3s forwards;
+        transform: translateY(8px);
+        animation: enter 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       }
       @keyframes enter {
         to {
@@ -258,223 +545,415 @@
           transform: none;
         }
       }
-      .user {
-        align-self: flex-end;
-        background: var(--violeta);
-        color: #fff;
-      }
-      .assistant {
-        align-self: flex-start;
-        background: #ede8f8;
-        color: #3d2e60;
-      }
-      .msg {
+
+      .msg-meta {
+        font-family: "Geist Mono", monospace;
+        font-size: 10px;
+        color: var(--text-3);
+        padding: 0 4px;
         display: flex;
         align-items: center;
-        gap: 0.6rem;
+        gap: 8px;
       }
-      .small-face {
-        width: 28px;
-        height: 28px;
+      .msg-meta .meta-name {
+        color: var(--violet-m);
+        font-weight: 500;
+      }
+      .msg-meta.user-meta .meta-name {
+        color: var(--lila);
+      }
+
+      .msg-row {
+        display: flex;
+        align-items: flex-end;
+        gap: 8px;
+      }
+      .msg-group.user .msg-row {
+        flex-direction: row-reverse;
+      }
+
+      /* carita mascota */
+      .face {
+        width: 30px;
+        height: 30px;
         background: #ffeb3b;
         border-radius: 50%;
         position: relative;
+        flex-shrink: 0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       }
-      .small-face .eye {
+      .face .eye {
         width: 4px;
         height: 4px;
-        background: #000;
+        background: #333;
         border-radius: 50%;
         position: absolute;
-        top: 30%;
+        top: 28%;
       }
-      .small-face .eye.l {
-        left: 25%;
+      .face .eye.l {
+        left: 24%;
       }
-      .small-face .eye.r {
-        right: 25%;
+      .face .eye.r {
+        right: 24%;
       }
-      .small-face .mouth {
+      .face .mouth {
         position: absolute;
         left: 50%;
         bottom: 20%;
         transform: translateX(-50%);
-        width: 12px;
-        height: 6px;
+        width: 14px;
+        height: 7px;
       }
-      .small-face.neutral .mouth {
-        border-bottom: 2px solid #000;
+      .face.neutral .mouth {
+        border-bottom: 2px solid #333;
+        border-radius: 0 0 7px 7px;
       }
-      .small-face.positive .mouth {
-        border-bottom: 3px solid #000;
+      .face.positive .mouth {
+        border-bottom: 3px solid #333;
+        border-radius: 0 0 10px 10px;
       }
-      .small-face.negative .mouth {
-        border-top: 3px solid #000;
-        bottom: 30%;
+      .face.negative .mouth {
+        border-top: 3px solid #333;
+        bottom: 28%;
+        border-radius: 10px 10px 0 0;
       }
-      .typing {
+
+      .msg-bubble {
+        max-width: 72%;
+        padding: 10px 14px;
+        border-radius: 12px;
+        font-size: 14px;
+        line-height: 1.6;
+        word-break: break-word;
+      }
+      .msg-group.user .msg-bubble {
+        background: linear-gradient(135deg, #9b7fd4, #7f00ff);
+        color: #fff;
+        border-bottom-right-radius: 4px;
+        box-shadow: 0 3px 12px rgba(127, 0, 255, 0.2);
+      }
+      .msg-group.assistant .msg-bubble {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text);
+        border-bottom-left-radius: 4px;
+      }
+
+      /* typing dots */
+      .typing-dots {
         display: flex;
+        gap: 4px;
         align-items: center;
+        padding: 2px 0;
       }
-      .typing .dot {
+      .typing-dots span {
         width: 6px;
         height: 6px;
-        background: #555;
+        background: var(--violet-m);
         border-radius: 50%;
-        margin: 0 2px;
-        animation: bounce 0.6s infinite alternate;
+        animation: tdot 0.9s infinite ease-in-out;
       }
-      .bottom-bar {
+      .typing-dots span:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .typing-dots span:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+      @keyframes tdot {
+        0%,
+        80%,
+        100% {
+          transform: scale(0.6);
+          opacity: 0.4;
+        }
+        40% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .date-chip {
+        text-align: center;
+        margin: 4px 0 18px;
+      }
+      .date-chip span {
+        font-family: "Geist Mono", monospace;
+        font-size: 10px;
+        color: var(--text-3);
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 3px 12px;
+        border-radius: 20px;
+        letter-spacing: 0.05em;
+      }
+
+      /* input bar */
+      .input-area {
+        border-top: 1px solid var(--border);
+        padding: 14px 20px;
+        flex-shrink: 0;
+        background: var(--surface);
+      }
+      .input-row {
         display: flex;
-        gap: 0.5rem;
+        gap: 8px;
         align-items: center;
+        background: var(--surface2);
+        border: 1.5px solid var(--border);
+        border-radius: 14px;
+        padding: 8px 8px 8px 16px;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .input-row:focus-within {
+        border-color: var(--violet-m);
+        box-shadow: 0 0 0 3px rgba(155, 127, 212, 0.12);
       }
       #msgInput {
         flex: 1;
-        padding: 10px;
-        border-radius: 10px;
-        border: 1px solid #c4b0e8;
-        background: #ede8f8;
-        font-size: 14px;
-        outline: none;
-      }
-      .send-btn {
-        background: var(--violeta);
-        color: #fff;
+        background: transparent;
         border: none;
-        border-radius: 10px;
-        padding: 10px 16px;
-        cursor: pointer;
+        outline: none;
+        color: var(--text);
+        font-family: "Geist", sans-serif;
         font-size: 14px;
-        transition:
-          background 0.2s,
-          transform 0.2s;
+        padding: 4px 0;
       }
-      .send-btn:hover {
-        background: #5a00c0;
-        transform: scale(1.04);
-      }
-      .send-btn:active {
-        transform: scale(0.96);
+      #msgInput::placeholder {
+        color: var(--text-3);
       }
 
-      /* ────────────────────────────────
-     OCULTAR ELEMENTOS (para cambiar de pantalla)
-     ──────────────────────────────── */
+      .send-btn {
+        background: linear-gradient(135deg, #9b7fd4, #7f00ff);
+        border: none;
+        border-radius: 9px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition:
+          transform 0.15s,
+          box-shadow 0.2s,
+          filter 0.15s;
+        box-shadow: 0 3px 10px rgba(127, 0, 255, 0.22);
+      }
+      .send-btn:hover {
+        transform: scale(1.06);
+        filter: brightness(1.1);
+        box-shadow: 0 5px 14px rgba(127, 0, 255, 0.35);
+      }
+      .send-btn:active {
+        transform: scale(0.93);
+      }
+      .send-btn svg {
+        width: 16px;
+        height: 16px;
+        fill: #fff;
+      }
+
       .hidden {
-        display: none;
+        display: none !important;
       }
     </style>
   </head>
   <body>
-    <div class="app">
-      <!-- La etiqueta “nexis.ia” en la esquina superior derecha -->
-      <div class="top-right">nexis.ia</div>
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-logo">
+        <div class="mascot-mini">
+          <div class="eye l"></div>
+          <div class="eye r"></div>
+          <div class="mouth"></div>
+        </div>
+        nexis.ia
+      </div>
+      <div class="topbar-model">llama3.2:3b</div>
+    </header>
 
-      <!-- ==================== PANTALLA DE REGISTRO ==================== -->
-      <div class="form-screen">
-        <div class="emoji">😏</div>
-        <h1>Nexis Asistente Social IA</h1>
-
-        <label>Nombre</label>
-        <input type="text" placeholder="Tu nombre…" id="nameInput" />
-
-        <label>¿Tienes medicación?</label>
-        <div class="radio-group">
-          <button class="active" id="si-btn" onclick="setMed(true)">Sí</button>
-          <button id="no-btn" onclick="setMed(false)">No</button>
+    <!-- ══ SETUP ══ -->
+    <div class="setup-screen" id="setupScreen">
+      <div class="setup-card">
+        <div class="mascot-big">
+          <div class="eye l"></div>
+          <div class="eye r"></div>
+          <div class="mouth"></div>
         </div>
 
-        <div class="med-wrapper" id="med-wrapper">
-          <label>Nombre del medicamento</label>
-          <input type="text" id="med-input" placeholder="Ej.: Sertralina…" />
+        <div class="setup-header">
+          <div class="eyebrow">configuración inicial</div>
+          <h1>Bienvenido a <em>nexis.ia</em></h1>
+          <p>Tu asistente social de IA. Cuéntanos un poco antes de empezar.</p>
         </div>
 
-        <label>¿Por cuánto tiempo usarás la app?</label>
-        <input type="text" placeholder="Ej.: 3 meses, indefinido…" />
+        <div class="field">
+          <label>Nombre</label>
+          <input type="text" id="nameInput" placeholder="Tu nombre…" />
+        </div>
 
-        <label>¿Cómo te gustaría usar la app?</label>
-        <div class="options">
-          <div class="card active" onclick="setUso(this)">
-            💬<br />Consejero
+        <div class="field">
+          <label>¿Tienes medicación?</label>
+          <div class="toggle-row">
+            <button
+              class="toggle-btn active"
+              id="si-btn"
+              onclick="setMed(true)"
+            >
+              Sí
+            </button>
+            <button class="toggle-btn" id="no-btn" onclick="setMed(false)">
+              No
+            </button>
           </div>
-          <div class="card" onclick="setUso(this)">🤝<br />Ayudante</div>
-          <div class="card" onclick="setUso(this)">📓<br />Diario</div>
-          <div class="card" onclick="setUso(this)">🧘<br />Bienestar</div>
+          <div class="med-slide" id="med-slide">
+            <div class="field">
+              <label>Medicamento</label>
+              <input
+                type="text"
+                id="med-input"
+                placeholder="Ej.: Sertralina…"
+              />
+            </div>
+          </div>
         </div>
 
-        <button class="continue-btn" id="continueBtn">Continuar</button>
-      </div>
-
-      <!-- ==================== PANTALLA DE CHAT ==================== -->
-      <div class="chat-screen hidden">
-        <div id="chat"></div>
-
-        <div class="bottom-bar">
-          <input type="text" id="msgInput" placeholder="Escribe tu mensaje…" />
-          <button class="send-btn" id="sendBtn">Enviar</button>
+        <div class="field">
+          <label>Duración de uso</label>
+          <input
+            type="text"
+            id="durationInput"
+            placeholder="Ej.: 3 meses, indefinido…"
+          />
         </div>
-      </div>
 
-      <!-- Sonido de “burbuja explotando” -->
-      <audio id="bubbleSound" preload="auto">
-        <source
-          src="data:audio/mp3;base64,//uQxAALCAAQDABAAAAAAAKxAFAAAANjAAABXODr5NgWjA3ACMAAVc9hNkMPwAAAAA="
-          type="audio/mp3"
-        />
-      </audio>
+        <div class="field">
+          <label>Modo de uso</label>
+          <div class="mode-grid">
+            <div class="mode-card active" onclick="setUso(this)">
+              <div class="mode-icon">💬</div>
+              <div class="mode-label">Consejero</div>
+            </div>
+            <div class="mode-card" onclick="setUso(this)">
+              <div class="mode-icon">🤝</div>
+              <div class="mode-label">Ayudante</div>
+            </div>
+            <div class="mode-card" onclick="setUso(this)">
+              <div class="mode-icon">📓</div>
+              <div class="mode-label">Diario</div>
+            </div>
+            <div class="mode-card" onclick="setUso(this)">
+              <div class="mode-icon">🧘</div>
+              <div class="mode-label">Bienestar</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="setup-btn" id="continueBtn">Iniciar sesión →</button>
+      </div>
     </div>
 
+    <!-- ══ CHAT ══ -->
+    <div class="chat-screen hidden" id="chatScreen">
+      <aside class="sidebar">
+        <div class="sidebar-label">Sesión</div>
+        <div class="sidebar-item active">
+          <span class="si-icon">💬</span>
+          <span id="sb-mode-label">Consejero</span>
+        </div>
+        <div style="margin-top: 12px">
+          <div class="sidebar-label">Modelo</div>
+          <div class="sidebar-item">
+            <span class="si-icon">🔮</span>
+            <span
+              style="
+                font-family: &quot;Geist Mono&quot;, monospace;
+                font-size: 11px;
+              "
+              >llama3.2:3b</span
+            >
+          </div>
+        </div>
+        <div class="sidebar-user">
+          <div class="sidebar-avatar" id="sb-avatar">?</div>
+          <span class="sidebar-name" id="sb-name">—</span>
+        </div>
+      </aside>
+
+      <div class="chat-main">
+        <div class="chat-header">
+          <span class="chat-header-mode" id="ch-mode">consejero</span>
+          <span class="chat-header-sep">/</span>
+          <span class="chat-header-mode" id="ch-name" style="color: var(--lila)"
+            >—</span
+          >
+          <span class="chat-header-status" id="ch-status"
+            ><span class="ch-dot">●</span> listo</span
+          >
+        </div>
+
+        <div id="chat">
+          <div class="date-chip"><span id="dateChip"></span></div>
+        </div>
+
+        <div class="input-area">
+          <div class="input-row">
+            <input
+              type="text"
+              id="msgInput"
+              placeholder="Escribe tu mensaje…"
+            />
+            <button class="send-btn" id="sendBtn">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <audio id="bubbleSound" preload="auto">
+      <source
+        src="data:audio/mp3;base64,//uQxAALCAAQDABAAAAAAAKxAFAAAANjAAABXODr5NgWjA3ACMAAVc9hNkMPwAAAAA="
+        type="audio/mp3"
+      />
+    </audio>
+
     <script>
-      /* ---------- Funciones del formulario ---------- */
       function setMed(tiene) {
         document.getElementById("si-btn").classList.toggle("active", tiene);
         document.getElementById("no-btn").classList.toggle("active", !tiene);
-        const wrapper = document.getElementById("med-wrapper");
+        const slide = document.getElementById("med-slide");
         const inp = document.getElementById("med-input");
-        wrapper.classList.toggle("hidden", !tiene);
+        slide.classList.toggle("collapsed", !tiene);
         inp.disabled = !tiene;
         if (!tiene) inp.value = "";
       }
       function setUso(el) {
         document
-          .querySelectorAll(".card")
+          .querySelectorAll(".mode-card")
           .forEach((c) => c.classList.remove("active"));
         el.classList.add("active");
       }
 
-      /* ---------- Variables Globales ---------- */
       const API_URL = "http://187.127.253.96:11434/api/generate";
       let userData = {};
-      let styleMode = "friendly"; // friendly / caring / compassion
 
-      /* ---------- Utilidades UI ---------- */
-      function addMessage(role, html) {
-        const cont = document.createElement("div");
-        cont.className = `message ${role}`;
-        cont.innerHTML = html;
-        const chat = document.getElementById("chat");
-        chat.appendChild(cont);
-        chat.scrollTop = chat.scrollHeight;
+      /* carita con sentimiento */
+      function makeFace(sentiment) {
+        const f = document.createElement("div");
+        f.className = `face ${sentiment}`;
+        ["eye l", "eye r", "mouth"].forEach((cls) => {
+          const d = document.createElement("div");
+          d.className = cls;
+          f.appendChild(d);
+        });
+        return f;
       }
 
-      /* ---------- Creación de caras amarillas ---------- */
-      function createFace(sent) {
-        const face = document.createElement("div");
-        face.className = `small-face ${sent}`;
-        const eyeL = document.createElement("div");
-        eyeL.className = "eye l";
-        const eyeR = document.createElement("div");
-        eyeR.className = "eye r";
-        const mouth = document.createElement("div");
-        mouth.className = "mouth";
-        face.appendChild(eyeL);
-        face.appendChild(eyeR);
-        face.appendChild(mouth);
-        return face;
-      }
-
-      /* ---------- Sentimiento (muy simple) ---------- */
       function analyseSentiment(txt) {
         const pos = [
           "bien",
@@ -486,6 +965,8 @@
           "útil",
           "😊",
           "👍",
+          "hola",
+          "buenas",
         ];
         const neg = [
           "mal",
@@ -496,6 +977,7 @@
           "triste",
           "😞",
           "😔",
+          "lo siento",
         ];
         const low = txt.toLowerCase();
         for (const w of pos) if (low.includes(w)) return "positive";
@@ -503,103 +985,143 @@
         return "neutral";
       }
 
-      /* ---------- Mensajes de usuario y IA ---------- */
-      function addUserMessage(txt) {
-        addMessage("user", `<span>${txt}</span>`);
+      function addGroup(role, content, sentiment = "neutral") {
+        const chat = document.getElementById("chat");
+        const group = document.createElement("div");
+        group.className = `msg-group ${role}`;
+
+        const meta = document.createElement("div");
+        meta.className = `msg-meta ${role === "user" ? "user-meta" : ""}`;
+        const now = new Date().toLocaleTimeString("es-ES", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        meta.innerHTML = `<span class="meta-name">${role === "user" ? userData.name || "tú" : "nexis.ia"}</span><span>${now}</span>`;
+
+        const row = document.createElement("div");
+        row.className = "msg-row";
+
+        const bubble = document.createElement("div");
+        bubble.className = "msg-bubble";
+        if (typeof content === "string") bubble.textContent = content;
+        else bubble.appendChild(content);
+
+        if (role === "assistant") {
+          const face = makeFace(sentiment);
+          row.appendChild(face);
+          row.appendChild(bubble);
+        } else {
+          row.appendChild(bubble);
+        }
+
+        group.appendChild(meta);
+        group.appendChild(row);
+        chat.appendChild(group);
+        chat.scrollTop = chat.scrollHeight;
+        return group;
+      }
+
+      function showThinking() {
+        const dots = document.createElement("div");
+        dots.className = "typing-dots";
+        dots.innerHTML = "<span></span><span></span><span></span>";
+        const g = addGroup("assistant", dots, "neutral");
+        document.getElementById("ch-status").innerHTML =
+          `<span class="ch-dot">●</span> pensando…`;
+        return g;
+      }
+
+      function addUserMsg(txt) {
+        addGroup("user", txt);
         const snd = document.getElementById("bubbleSound");
         snd.currentTime = 0;
-        snd.play();
+        snd.play().catch(() => {});
       }
-      function addAIMessage(txt, sentiment) {
-        const face = createFace(sentiment);
-        const html = `<div class="msg"><div>${face.outerHTML}</div><div class="text">${txt}</div></div>`;
-        addMessage("assistant", html);
-      }
-
-      /* ---------- Animación “pensando” (tres puntitos) ---------- */
-      function showThinking() {
-        const face = createFace("neutral");
-        const typing = `<div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
-        const html = `<div class="msg"><div>${face.outerHTML}</div>${typing}</div>`;
-        const cont = document.createElement("div");
-        cont.className = "message assistant";
-        cont.innerHTML = html;
-        const chat = document.getElementById("chat");
-        chat.appendChild(cont);
-        chat.scrollTop = chat.scrollHeight;
-        return cont; // se eliminará cuando llegue la respuesta
+      function addAIMsg(txt) {
+        const sentiment = analyseSentiment(txt);
+        addGroup("assistant", txt, sentiment);
+        document.getElementById("ch-status").innerHTML =
+          `<span class="ch-dot">●</span> listo`;
       }
 
-      /* ---------- Saludo inicial ---------- */
-      function greetUser() {
-        const txt = `¡Hola ${userData.name}! Soy nexis.ia y estoy aquí para ${styleMode} ayudarte.`;
-        addAIMessage(txt, "neutral");
-      }
-
-      /* ---------- Llamada al modelo Ollama ---------- */
       async function askLLM(prompt) {
-        const payload = { model: "llama3.2:3b", prompt, stream: false };
         try {
           const r = await fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
+            body: JSON.stringify({
+              model: "llama3.2:3b",
+              prompt,
+              stream: false,
+            }),
           });
           if (!r.ok) throw new Error(`HTTP ${r.status}`);
-          const data = await r.json();
-          return data.response ?? "[Sin respuesta]";
+          const d = await r.json();
+          return d.response ?? "[Sin respuesta]";
         } catch (e) {
-          console.error(e);
-          return `Error: ${e.message}`;
+          return `Error al conectar: ${e.message}`;
         }
       }
 
-      /* ---------- Envío del mensaje del usuario ---------- */
       async function sendMessage() {
         const input = document.getElementById("msgInput");
         const txt = input.value.trim();
         if (!txt) return;
-        addUserMessage(txt);
+        addUserMsg(txt);
         input.value = "";
         const thinking = showThinking();
         const reply = await askLLM(txt);
         thinking.remove();
-        const sentiment = analyseSentiment(reply);
-        addAIMessage(reply, sentiment);
+        addAIMsg(reply);
       }
 
-      /* ---------- Lógica del paso registro → chat ---------- */
       document.getElementById("continueBtn").addEventListener("click", () => {
         const name = document.getElementById("nameInput").value.trim();
         if (!name) {
           alert("Introduce tu nombre");
           return;
         }
+
         const hasMed = document
           .getElementById("si-btn")
           .classList.contains("active");
         const med = hasMed
           ? document.getElementById("med-input").value.trim()
           : "";
-        const card = document.querySelector(".card.active");
-        const help = card ? card.textContent.trim() : "Consejero";
+        const card = document.querySelector(".mode-card.active");
+        const mode = card
+          ? card.querySelector(".mode-label").textContent.trim()
+          : "Consejero";
+        const dur = document.getElementById("durationInput").value.trim();
 
-        // Selección de tono según la categoría elegida
-        if (help.includes("Consejero")) styleMode = "friendly";
-        else if (help.includes("Ayudante")) styleMode = "caring";
-        else if (help.includes("Diario")) styleMode = "compassion";
-        else styleMode = "friendly";
+        userData = { name, hasMed, med, mode, dur };
 
-        userData = { name, hasMed, med, help };
+        document.getElementById("sb-name").textContent = name;
+        document.getElementById("sb-avatar").textContent =
+          name[0].toUpperCase();
+        document.getElementById("sb-mode-label").textContent = mode;
+        document.getElementById("ch-name").textContent = name;
+        document.getElementById("ch-mode").textContent = mode.toLowerCase();
 
-        // Cambiar de pantalla
-        document.querySelector(".form-screen").classList.add("hidden");
-        document.querySelector(".chat-screen").classList.remove("hidden");
+        const now = new Date();
+        document.getElementById("dateChip").textContent =
+          now.toLocaleDateString("es-ES", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+          });
 
-        greetUser();
+        document.getElementById("setupScreen").classList.add("hidden");
+        document.getElementById("chatScreen").classList.remove("hidden");
+
+        const hr = now.getHours();
+        const sal =
+          hr < 12 ? "Buenos días" : hr < 19 ? "Buenas tardes" : "Buenas noches";
+        addAIMsg(
+          `${sal}, ${name}! Soy nexis.ia, tu asistente en modo ${mode.toLowerCase()}. ¿En qué puedo ayudarte hoy?`,
+        );
       });
 
-      /* ---------- Eventos del chat ---------- */
       document.getElementById("sendBtn").addEventListener("click", sendMessage);
       document.getElementById("msgInput").addEventListener("keydown", (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
